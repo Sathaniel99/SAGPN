@@ -1,0 +1,77 @@
+{% extends 'pages/modules/gestor_modules/reportes.html' %}
+{% load static %}
+
+{% block reportes %}
+<label class="position-absolute top-0 end-0 me-3 mt-2 text-muted">{{ fecha }}</label>
+<div class="border-bottom border-secondary-subtle mb-3">
+    <h2>{{ title_page }}</h2>
+</div>
+<div class="d-flex justify-content-center">
+    <form method="POST" enctype="multipart/form-data" class="row g-3 col-sm-10 col-md-10 col-lg-10 col-xl-8 col-xxl-7">
+        {% csrf_token %}
+        <div class="col-md-6 d-flex flex-column">
+            <!-- Cliente -->
+            <div class="">
+                <label class="text-center w-100" for="{{ form.cliente.id_for_label }}">Cliente:</label>
+                <select class="form-select {% if user.rol == 'Cliente' %}pointer-events-none{% endif %}" name="{{ form.cliente.name }}" {% if user.rol == 'Cliente' %}required{% endif %} id="{{ form.cliente.id_for_label }}">
+                    <option value="" selected hidden>---------</option>
+                    {% for ax in form.cliente.field.queryset %}
+                        <option value="{{ ax.id }}">{{ ax.first_name }} {{ ax.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Técnico -->
+            <div class="">
+                <label class="text-center w-100" for="{{ form.tecnico.id_for_label }}">Técnico Asignado (opcional):</label>
+                <select class="form-select{% if user.rol == 'Técnico' %} pointer-events-none{% endif %}" name="{{ form.tecnico.name }}" id="{{ form.tecnico.id_for_label }}">
+                    <option value="" selected hidden>---------</option>
+                    {% for ax in form.tecnico.field.queryset %}
+                    <option value="{{ ax.id }}">{{ ax.first_name }} {{ ax.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Área de la Empresa -->
+            <div class="">
+                <label class="text-center w-100" for="{{ form.area.id_for_label }}">Área de la Empresa:</label>
+                <select class="form-select" name="{{ form.area.name }}" required id="{{ form.area.id_for_label }}">
+                    {% for value, label in form.area.field.choices %}
+                        <option value="{{ value }}" {% if label == "---------" %} hidden selected {% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Prioridad -->
+            <div class="">
+                <label class="text-center w-100" for="{{ form.prioridad.id_for_label }}">Prioridad:</label>
+                <select class="form-select" name="{{ form.prioridad.name }}" id="{{ form.prioridad.id_for_label }}">
+                    <option value="" selected hidden>- Seleccione Prioridad -</option>
+                    {% for value, label in form.prioridad.field.choices %}
+                        <option value="{{ value }}" class="{% cycle 'bg-success' 'bg-warning' 'bg-danger' %}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Situación -->
+            <div class="">
+                <label class="text-center w-100" for="{{ form.situacion.id_for_label }}">Situación:</label>
+                <input class="form-control" type="text" name="{{ form.situacion.name }}" maxlength="20" required id="{{ form.situacion.id_for_label }}" />
+            </div>
+
+        </div>
+
+        
+            <!-- Descripción -->
+            <div class="col-md-6 d-flex flex-column">
+                <label class="text-center w-100" for="{{ form.descripcion.id_for_label }}">Descripción:</label>
+                <textarea class="w-100 h-100 form-control" name="{{ form.descripcion.name }}" required id="{{ form.descripcion.id_for_label }}" value="{{ form.descripcion.value }}" style="min-height: 300px;"></textarea>
+            </div>
+
+        
+        <div class="d-flex">
+            <button type="submit" class="btn btn-success m-auto"><i class="bi bi-plus-circle me-2"></i>Crear</button>
+        </div>
+    </form>
+</div>
+{% endblock reportes %}

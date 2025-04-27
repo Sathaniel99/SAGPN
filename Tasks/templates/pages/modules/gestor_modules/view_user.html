@@ -1,0 +1,104 @@
+{% extends 'pages/modules/gestor_modules/reportes.html' %}
+{% load static %}
+
+{% block reportes %}
+<!-- Fecha en la esquina superior derecha -->
+<label class="position-absolute top-0 end-0 me-3 mt-2 text-muted">{{ fecha }}</label>
+
+<!-- Título de la página -->
+<div class="border-bottom border-secondary-subtle mb-4">
+    <h2 class="text-center">{{ title_page }}</h2>
+</div>
+
+<!-- Contenedor principal -->
+<div class="container d-flex justify-content-center">
+    <!-- Tarjeta principal del técnico -->
+    <div class="col-8 card shadow">
+        <div class="card-body">
+            <!-- Encabezado con Avatar y Nombre -->
+            <div class="d-flex align-items-center mb-4">
+                <!-- Avatar -->
+                <div class="me-4">
+                    {% if usuario.img %}
+                        <img src="{{ usuario.img.url }}" alt="Avatar de {{ usuario.username }}" class="rounded-circle border border-3 border-primary" style="width: 8rem; height: 8rem; object-fit: cover;">
+                    {% else %}
+                        <div class="rounded-circle bg-primary d-flex justify-content-center align-items-center text-white fs-1" style="width: 8rem; height: 8rem;">
+                            {{ initials }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Información básica -->
+                <div>
+                    <h3 class="mb-0">{{ usuario.first_name }} {{ usuario.last_name }}</h3>
+                    <p class="text-muted mb-1">{{ usuario.rol }}</p>
+                    <p class="text-muted mb-0">{{ usuario.email }}</p>
+                </div>
+            </div>
+
+            <!-- Información detallada -->
+            <div class="row">
+                <!-- Columna izquierda -->
+                <div class="col-md-6">
+                    <div class="card border-0 mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">Datos Personales</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Nombre de Usuario:</strong> {{ usuario.username }}</li>
+                                <li><strong>Nombre(s):</strong> {{ usuario.first_name }}</li>
+                                <li><strong>Apellido(s):</strong> {{ usuario.last_name }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna derecha -->
+                <div class="col-md-6">
+                    <div class="card border-0 mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">Actividad</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Fecha de Registro:</strong> {{ usuario.date_joined|date:"d/m/Y H:i" }}</li>
+                                <li><strong>Último Inicio de Sesión:</strong> {{ usuario.last_login|date:"d/m/Y H:i" }}</li>
+                                <li>
+                                    <strong>Estado:</strong>
+                                    <span class="badge {% if usuario.is_active %}bg-success{% else %}bg-danger{% endif %}">
+                                        {% if usuario.is_active %}Activo{% else %}Inactivo{% endif %}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones -->
+            <div class="d-flex justify-content-end gap-2">
+                <a class="btn btn-outline-primary" href="{% url 'cambiar_estado_account' usuario.id 'False' %}">
+                    <i class="bi bi-x-circle me-2"></i>Desactivar
+                </a>
+                <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    <i class="bi bi-trash-fill me-2"></i>Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmación para Eliminar -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-4 gap-1">
+            <h4 class="modal-title text-center text-danger" id="deleteModalLabel"><i class="bi bi-info-circle me-2"></i>Confirmar Eliminación</h5>
+            <hr>
+            <h5>¿Estás seguro de que deseas eliminar al <strong>{{ usuario.rol }}</strong> <strong class="text-decoration-underline">{{ usuario.first_name }} {{ usuario.last_name }}</strong>?</h5>
+            <h5 class="fw-bold text-center">Esta acción no se puede deshacer.</h5>
+            <hr>
+            <div class="d-flex justify-content-around">
+                <a class="btn btn-danger" href="{% url 'delete_account' usuario.id %}">Eliminar</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock reportes %}

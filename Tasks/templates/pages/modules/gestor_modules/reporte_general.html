@@ -1,0 +1,265 @@
+{% extends 'pages/modules/gestor_modules/reportes.html' %}
+{% load static %}
+
+{% block reportes %}
+<style>
+    .cards{
+        width: 15rem;
+        height: 7rem;
+    }
+    .card-chart{
+        min-width: 14rem;
+    }
+</style>
+<label class="position-absolute top-0 end-0 me-3 mt-2 text-muted">{{ fecha }}</label>
+<div class="border-bottom border-secondary-subtle mb-3">
+    <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+</div>
+<div class="d-flex flex-wrap flex-column gap-3">
+    <div class="container ms-0 px-0 d-flex flex-wrap gap-3">
+        <div class="cards border border-2 border-secondary-subtle d-flex flex-column justify-content-between rounded shadow p-3">
+            <h4 class="m-0">Total de Usuarios</h4>
+            <h6 class="text-end m-0 counter-frame">{{ total_usuarios }}</h6>
+        </div>
+        <div class="cards border border-2 border-secondary-subtle d-flex flex-column justify-content-between rounded shadow p-3">
+            <h4 class="m-0">Clientes</h4>
+            <h6 class="text-end m-0 counter-frame">{{ total_clientes }}</h6>
+        </div>
+        <div class="cards border border-2 border-secondary-subtle d-flex flex-column justify-content-between rounded shadow p-3">
+            <h4 class="m-0">Técnicos</h4>
+            <h6 class="text-end m-0 counter-frame">{{ total_tecnicos }}</h6>
+        </div>
+        <div class="cards border border-2 border-secondary-subtle d-flex flex-column justify-content-between rounded shadow p-3">
+            <h4 class="m-0">Gestores</h4>
+            <h6 class="text-end m-0 counter-frame">{{ total_gestores }}</h6>
+        </div>
+    </div>
+    <div class="container ms-0 px-0 d-flex flex-wrap gap-3">
+        <div class="cards border border-2 border-secondary-subtle d-flex flex-column justify-content-between rounded shadow p-3">
+            <h4 class="m-0">Tickets por usuario</h4>
+            <h6 class="text-end m-0 counter-frame">{{ tickets_por_usuarios }}</h6>
+        </div>
+        <div class="cards border border-2 border-secondary-subtle d-flex flex-column justify-content-between rounded shadow p-3">
+            <h4 class="m-0">Tickets por Clientes</h4>
+            <h6 class="text-end m-0 counter-frame">{{ tickets_clientes }}</h6>
+        </div>
+        <div class="cards border border-2 border-secondary-subtle d-flex flex-column justify-content-between rounded shadow p-3">
+            <h4 class="m-0">Tickets por Tecnicos/Gestores</h4>
+            <h6 class="text-end m-0 counter-frame">{{ tickets_tecnicos_gestores }}</h6>
+        </div>
+        <div class="cards border border-2 border-secondary-subtle d-flex flex-column justify-content-between rounded shadow p-3">
+            <h4 class="m-0">Tickets este Mes</h4>
+            <h6 class="text-end m-0 counter-frame">{{ tickets_mes }}</h6>
+        </div>
+    </div>
+    <div class="container ms-0 px-0 d-flex flex-wrap gap-3">
+        <div class="cards border border-2 border-secondary-subtle d-flex flex-column justify-content-between rounded shadow p-3">
+            <h4 class="m-0">Total de Tickets</h4>
+            <h6 class="text-end m-0 counter-frame">{{ cantidad_tickets }}</h6>
+        </div>
+        <div class="cards border border-2 border-secondary-subtle d-flex flex-column justify-content-between rounded shadow p-3 bg-warning text-black">
+            <h4 class="m-0">Tickets asignados</h4>
+            <h6 class="text-end m-0 counter-frame">{{ tickets_asignados }}</h6>
+        </div>
+        <div class="cards border border-2 border-secondary-subtle d-flex flex-column justify-content-between rounded shadow p-3 bg-success text-light">
+            <h4 class="m-0">Tickets completados</h4>
+            <h6 class="text-end m-0 counter-frame">{{ tickets_completados }}</h6>
+        </div>
+        <div class="cards border border-2 border-secondary-subtle d-flex flex-column justify-content-between rounded shadow p-3 bg-danger text-light">
+            <h4 class="m-0">Tickets pendientes</h4>
+            <h6 class="text-end m-0 counter-frame">{{ tickets_pendientes }}</h6>
+        </div>
+    </div>
+    <div class="row mx-0 d-flex flex-row flex-wrap gap-3">
+        <div class="col px-0 gap-3">
+            <div class="col rounded p-0 border border-2 border-secondary-subtle shadow card-chart"><div id="chart-users"></div></div>
+            <div class="col rounded p-0 border border-2 border-secondary-subtle shadow card-chart"><div id="chart-tickets"></div></div>
+        </div>
+        <div class="col px-0 gap-3">
+            <div class="col rounded p-0 border border-2 border-secondary-subtle shadow card-chart"><div id="chart-tickets-state"></div></div>
+            <div class="col rounded p-0 border border-2 border-secondary-subtle shadow card-chart"><div id="chart-tickets-asignados"></div></div>
+        </div>
+        <div class="rounded p-0 border border-2 border-secondary-subtle shadow card-chart"><div id="chart-tickets-mensual"></div></div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Highcharts.chart('chart-users', {
+            chart: {
+                type: 'pie',
+                backgroundColor: '#f0f8ff',
+            },
+            title: {
+                text: 'Total de Usuarios', // Título del gráfico
+            },
+            tooltip: {
+                pointFormat: `<b>{series.name}:</b> </br><p class="m-0"><b>- Porciento</b> : {point.percentage:.1f}%</p></br><p class="m-0"><b>- Cantidad</b> : {y}</p>`, // Formato del tooltip
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true, // Permite seleccionar segmentos
+                    cursor: 'pointer', // Cambia el cursor al pasar sobre los segmentos
+                    dataLabels: {
+                        enabled: true, // Muestra etiquetas en los segmentos
+                        format: `<b>{series.name}:</b> </br><p class="m-0"><b>- Porciento</b> : {point.percentage:.1f}%</p></br><p class="m-0"><b>- Cantidad</b> : {y}</p>`, // Formato de las etiquetas
+                    },
+                },
+            },
+            series: [{
+                name: 'Usuarios', // Nombre de la serie
+                colorByPoint: true, // Asigna colores únicos a cada segmento
+                data: [
+                    { name: 'Clientes', y: {{ total_clientes }} }, // Datos: nombre y valor
+                    { name: 'Técnicos', y: {{ total_tecnicos }} },
+                    { name: 'Gestores de Tareas', y: {{ total_gestores }} },
+                ],
+            }],
+        });
+        Highcharts.chart('chart-tickets', {
+            chart: {
+                type: 'pie', // Tipo de gráfico: pastel
+            },
+            title: {
+                text: 'Total de Tickets', // Título del gráfico
+            },
+            tooltip: {
+                pointFormat: `<b>{series.name}:</b> </br><p class="m-0"><b>- Porciento</b> : {point.percentage:.1f}%</p></br><p class="m-0"><b>- Cantidad</b> : {y}</p>`, // Formato del tooltip
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true, // Permite seleccionar segmentos
+                    cursor: 'pointer', // Cambia el cursor al pasar sobre los segmentos
+                    dataLabels: {
+                        enabled: true, // Muestra etiquetas en los segmentos
+                        format: `<b>{series.name}:</b> </br><p class="m-0"><b>- Porciento</b> : {point.percentage:.1f}%</p></br><p class="m-0"><b>- Cantidad</b> : {y}</p>`, // Formato de las etiquetas
+                    },
+                },
+            },
+            series: [{
+                name: 'Usuarios', // Nombre de la serie
+                colorByPoint: true, // Asigna colores únicos a cada segmento
+                data: [
+                    { name: 'Otros', y: ({{ tickets_por_usuarios }} - {{ tickets_clientes }} - {{ tickets_tecnicos_gestores }}) }, // Datos: nombre y valor
+                    { name: 'Tickets Clientes', y: {{ tickets_clientes }} },
+                    { name: 'Tickets Técnicos y/o Gestores', y: {{ tickets_tecnicos_gestores }} },
+                ],
+            }],
+        });
+        Highcharts.chart('chart-tickets-state', {
+            colors: ['#0bc36e', '#e11a2d'],
+            chart: {
+                type: 'pie', // Tipo de gráfico: pastel
+            },
+            title: {
+                text: 'Estado de Tickets', // Título del gráfico
+            },
+            tooltip: {
+                pointFormat: `<b>{series.name}:</b> </br><p class="m-0"><b>- Porciento</b> : {point.percentage:.1f}%</p></br><p class="m-0"><b>- Cantidad</b> : {y}</p>`, // Formato del tooltip
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true, // Permite seleccionar segmentos
+                    cursor: 'pointer', // Cambia el cursor al pasar sobre los segmentos
+                    dataLabels: {
+                        enabled: true, // Muestra etiquetas en los segmentos
+                        format: `<b>{series.name}:</b> </br><p class="m-0"><b>- Porciento</b> : {point.percentage:.1f}%</p></br><p class="m-0"><b>- Cantidad</b> : {y}</p>`, // Formato de las etiquetas
+                    },
+                },
+            },
+            series: [{
+                name: 'Tickets', // Nombre de la serie
+                colorByPoint: true, // Asigna colores únicos a cada segmento
+                data: [
+                    { name: 'Completados', y: {{ tickets_completados }} }, // Datos: nombre y valor
+                    { name: 'Pendientes', y: {{ tickets_pendientes }} },
+                ],
+            }],
+        });
+        Highcharts.chart('chart-tickets-asignados', {
+            colors: ['#ffc107', '#4a4942'],
+            chart: {
+                type: 'pie', // Tipo de gráfico: pastel
+            },
+            title: {
+                text: 'Asignación de Tickets', // Título del gráfico
+            },
+            tooltip: {
+                pointFormat: `<b>{series.name}:</b> </br><p class="m-0"><b>- Porciento</b> : {point.percentage:.1f}%</p></br><p class="m-0"><b>- Cantidad</b> : {y}</p>`, // Formato del tooltip
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true, // Permite seleccionar segmentos
+                    cursor: 'pointer', // Cambia el cursor al pasar sobre los segmentos
+                    dataLabels: {
+                        enabled: true, // Muestra etiquetas en los segmentos
+                        format: `<b>{series.name}:</b> </br><p class="m-0"><b>- Porciento</b> : {point.percentage:.1f}%</p></br><p class="m-0"><b>- Cantidad</b> : {y}</p>`, // Formato de las etiquetas
+                    },
+                },
+            },
+            series: [{
+                name: 'Tickets', // Nombre de la serie
+                colorByPoint: true, // Asigna colores únicos a cada segmento
+                data: [
+                    { name: 'Asignados', y: {{ tickets_asignados }} }, // Datos: nombre y valor
+                    { name: 'Sin asignar', y: ({{ cantidad_tickets }} - {{ tickets_asignados }})  },
+                ],
+            }],
+        });
+        Highcharts.chart('chart-tickets-mensual', {
+            chart: {
+                type: 'line',
+            },
+            title: {
+                text: 'Tickets Creados y Finalizados por Semana',
+            },
+            xAxis: {
+                categories: ["Semana 1", "Semana 2", "Semana 3", "Semana 4"],
+                title: {
+                    text: 'Semanas del Mes',
+                },
+            },
+            yAxis: {
+                title: {
+                    text: 'Número de Tickets',
+                },
+            },
+            series: [
+                {
+                    name: 'Tickets Creados',
+                    data: {{ tickets_creados_semana }},
+                    color: '#007bff', // Azul
+                },
+                {
+                    name: 'Tickets Finalizados',
+                    data: {{ tickets_finalizados_semana }},
+                    color: '#28a745', // Verde
+                },
+            ],
+            tooltip: {
+                shared: true,
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+            },
+            responsive: {
+                rules: [
+                    {
+                        condition: {
+                            maxWidth: 500,
+                        },
+                        chartOptions: {
+                            legend: {
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom',
+                            },
+                        },
+                    },
+                ],
+            },
+        });
+    });
+</script>
+{% endblock reportes %}

@@ -1,0 +1,146 @@
+{% extends 'pages/modules/gestor_modules/reportes.html' %}
+{% load static %}
+
+{% block reportes %}
+<link href="https://cdn.datatables.net/v/bs5/dt-2.2.2/b-3.2.2/b-colvis-3.2.2/cr-2.0.4/fc-5.0.4/fh-4.0.1/r-3.0.4/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.2/sp-2.3.3/sl-3.0.0/datatables.min.css" rel="stylesheet" integrity="sha384-hqATnVXi+N13qMdgM0c8dFQaLqmDS+yC0Z62IqzPHcluKL3qbjs5DrvdXCOdGFRa" crossorigin="anonymous">
+<label class="position-absolute top-0 end-0 me-3 mt-2 text-muted">{{ fecha }}</label>
+<div class="border-bottom border-secondary-subtle mb-3">
+    <h2>{{ title_page }}</h2>
+</div>
+<div class="container">
+    <table class="table table-striped table-bordered w-100" id="tickets-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Nombre/s</th>
+                <th>Apellido/s</th>
+                <th>Fecha de Creado</th>
+                <th>{% if 'asignar_tickets' in request.path %}Opciones{% else %}Finalizado{% endif %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ax in tickets %}
+            <tr>
+                <td>{{ ax.id }}</td>
+                <td>
+                    {% if ax.cliente %}
+                    {{ ax.cliente.username }}
+                    {% else %}
+                    <span class="badge rounded-pill text-bg-danger mx-auto">Cliente vacio</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if ax.cliente %}
+                    {{ ax.cliente.first_name }}
+                    {% else %}
+                    <span class="badge rounded-pill text-bg-danger mx-auto">Cliente vacio</span>
+                    {% endif %}
+                </td>
+                <td class="">
+                    {% if ax.cliente %}
+                    {{ ax.cliente.last_name }}
+                    {% else %}
+                    <span class="badge rounded-pill text-bg-danger mx-auto">Cliente vacio</span>
+                    {% endif %}
+                </td>
+                <td>{{ ax.fecha_ini|date:"SHORT_DATETIME_FORMAT" }}</td>
+                {% if 'asignar_tickets' in request.path %}
+                <td class="d-flex justify-content-around">
+                    <button class="btn btn-dark-orange" data-bs-toggle="modal" data-bs-target="#analizarModal" hx-get="/search_ticket_id/{{ ax.id }}" hx-target="#analizarModalContent" hx-swap="innerHTML" hx-trigger="click">Analizar</button>
+                    <button class="btn btn-outline-orange" data-bs-toggle="modal" data-bs-target="#asignarModal" data-bs-id-modal="{{ ax.id }}" onclick="changeHref(event)">Asignar</button>
+                </td>
+                {% else %}
+                <td>{{ ax.fecha_fin|date:"SHORT_DATETIME_FORMAT" }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div class="modal fade" id="analizarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="analizarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4 gap-1" id="analizarModalContent">
+            </div>
+        </div>
+    </div>
+
+    
+
+    <div class="modal fade" id="asignarModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="asignarModalLabel" aria-hidden="true" data-bs-url-target="">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 50rem;">
+            <div class="modal-content p-2 gap-1">
+                <h4 class="modal-title text-center">Técnicos</h5>
+                <hr>
+                <div class="modal-body">
+                    <table class="table table-striped table-bordered w-100" id="tecnicos-table">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Usuario</th>
+                                <th>Nombre/s</th>
+                                <th>Apellido/s</th>
+                                <th>Opción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ax in tecnicos %}
+                            <tr class="text-center">
+                                <td>{{ ax.username }}</td>
+                                <td>{{ ax.first_name }}</td>
+                                <td>{{ ax.last_name }}</td>
+                                <td class="d-flex justify-content-center">
+                                    <a class="btn btn-dark-orange" onclick="autoAsignURL(event)" id="{{ ax.id }}">Asignar</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://cdn.datatables.net/v/bs5/dt-2.2.2/b-3.2.2/b-colvis-3.2.2/cr-2.0.4/fc-5.0.4/fh-4.0.1/r-3.0.4/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.2/sp-2.3.3/sl-3.0.0/datatables.min.js" integrity="sha384-hqwLnlHKAbxzyfuByxABDEhuAVgVedlkYzKSyB4r7H/n3QTmJXtUSaHV0NhKYu39" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        $('#tickets-table').DataTable({
+          language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json', // Traducción al español
+          },
+          responsive: true, // Hace que la tabla sea responsive
+          dom: 'Bfrtip', // Define la disposición de los botones y elementos
+          buttons: [
+            'colvis' // Botón para mostrar/ocultar columnas
+          ],
+          columnDefs: [
+            { orderable: false, targets: [5] } // Desactiva el ordenamiento en la columna "Salario"
+          ],
+          fixedHeader: true, // Fija el encabezado de la tabla
+          select: false, // Habilita la selección de filas
+          scrollX: true, // Habilita desplazamiento horizontal
+          scrollY: '400px', // Altura máxima de la tabla
+          scrollCollapse: true, // Colapsa el desplazamiento vertical si no es necesario
+          searching: true, // Habilita la búsqueda
+          paging: true, // Habilita la paginación
+          info: true, // Muestra información sobre la página actual
+          lengthChange: true, // Permite cambiar el número de filas por página
+          autoWidth: false, // Desactiva el ajuste automático del ancho
+        });
+    });
+
+    var id_ticket = 0;
+
+    function changeHref(evt){
+        id_ticket = evt.target.getAttribute("data-bs-id-modal");
+    }
+    function autoAsignURL(evt){
+        let button = evt.target.id;
+        navigation.navigate(`/asignacion_ticket/${id_ticket}/${button}`)
+    }
+</script>
+{% endblock reportes %}

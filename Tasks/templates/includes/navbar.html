@@ -1,0 +1,97 @@
+{% load static %}
+<header>
+    <nav class="navbar navbar-expand-lg
+    {% if 'Página Principal' in title_page %} bg-transparent position-absolute top-0 w-100 border-0{% else %} bg-info-subtle border-bottom border-2 border-secondary{% endif %}
+    {% if not 'reporte' in request.path and not 'Página Principal' in title_page %} shadow{% endif %}">
+        <div class="container-fluid row">
+            <div class="col-2">
+                {% if "/" in request.path or 'access_denied' in request.path or 'reporte_general' in request.path %}
+                    {% if not 'Página Principal' in title_page %}
+                    <img class="object-fit-cover" src="{% static 'img/SAGPN.png' %}" alt="Logo de SAGPN" style="height: 2.4rem; filter: drop-shadow(1px 1px 2px grey);">
+                    {% endif %}
+                {% else %}
+                    <a class="btn btn-outline-light" href="{{ last_url }}"><i class="bi bi-chevron-left me-1"></i>Atrás</a>
+                {% endif %}
+            </div>
+            <div class="w-auto">
+                <h5 class="text-center m-0">{{ user.rol }}</h5>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-3 col-xl-2 col-xxl-2 d-flex">
+                
+                {% if not user.is_authenticated %}
+                    <button type="button" class="btn btn-outline-dark-orange ms-auto me-0" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar Sesión</button>
+                {% else %}
+                <!-- AVATAR -->
+                <div class="d-flex flex-row align-items-center gap-2 justify-content-end me-0 w-100">
+                    <div class="dropdown">
+                        <button class="rounded-circle bg-body-tertiary border-1 border border-black d-flex justify-content-center align-items-center shadow" style="height: 2.4rem; width: 2.4rem;" type="button" data-bs-toggle="dropdown">
+                            {% if user.img %}
+                                <img src="{{ user.img.url }}" alt="Avatar de {{ user.first_name }}" class="rounded-circle">
+                            {% else %}
+                                <p class="m-auto fw-bold">{{ initials }}</p>
+                            {% endif %}
+                        </button>
+                        <ul class="dropdown-menu p-0 flex-column">
+                            <li>
+                                <h6 class="m-2 text-center fw-bold border-bottom border-secondary-subtle border-1 p-2"><i class="bi bi-person me-1"></i>Perfil</h6>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2" href="#"><i class="bi bi-gear me-2"></i>Configuración</a>
+                            </li>
+                            <li>
+                                <form method="post" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <button class="d-block py-2 btn btn-outline-danger rounded-0 w-100" type="submit"><i class="bi bi-box-arrow-left me-2"></i>Desconectar</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h6 class="m-0 lh-1">{{ user.first_name }}</h6>
+                        <h6 class="m-0 lh-1">{{ user.last_name }}</h6>
+                        <h6 class="m-0 lh-1 text-muted">{{ user.rol }}</h6>
+                    </div>
+                </div>
+                {% endif %}
+    
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+
+{% if not user.is_authenticated %}
+<div class="modal fade" id="loginModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content py-4 px-5 border border-2 rounded bg-body-tertiary form shadow">
+            <div class="container-fluid text-center position-relative">
+                <div class="" style="transform: rotate(-30deg);">
+                    <i class="bi bi-ticket-perforated display-1 text-muted"></i>
+                </div>
+                <h2 class="fw-bold position-absolute top-0 start-0 ms-5">Sistema</h2>
+                <h2 class="fw-bold position-absolute bottom-0 end-0 me-4">de Tickets</h2>
+            </div>
+            <form action="{% url 'login' %}" method="post" class="d-flex flex-column mt-4">
+                {% csrf_token %}
+                <div class="mb-1 input-group">
+                    <span class="input-group-text bg-dark-subtle" for="username" style="width: 7rem;">Usuario</span>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de usuario">
+                </div>
+                <div class="mb-1 input-group d-flex flex-row">
+                    <span class="input-group-text bg-dark-subtle" for="password" style="width: 7rem;">Contraseña</span>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña">
+                    <button class="btn btn-outline-secondary" type="button" id="toggleViewPass"><i class="bi bi-eye-fill"></i></button>
+                </div>
+                <div class="mt-4 d-flex">
+                    <button class="btn btn-outline-success mx-auto" type="submit" >
+                        <i class="bi bi-person"></i> Iniciar Sesion
+                    </button>
+                    <button type="button" class="btn btn-danger mx-auto" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+            <a class="mt-3 mx-auto" href="{% url 'solicitar_account' %}">¿No tienes cuenta? Solicita un registro y obten una.</a>
+        </div>
+    </div>
+</div>
+{% endif %}

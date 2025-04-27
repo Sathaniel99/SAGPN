@@ -1,0 +1,87 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+{% block base %}
+<style>
+    #section-base{
+        display: flex;
+    }
+</style>
+<div class="m-auto bg-body-secondary d-flex flex-wrap flex-row justify-content-around position-relative rounded-4 shadow" method="post" style="width: 80rem; min-height: 30rem;">
+    <span class="position-absolute top-0 end-0 m-0 me-2 mt-1 badge rounded-pill {% if ax.prioridad == 'Baja' %}text-bg-success{% elif ax.prioridad == 'Media' %}text-bg-warning{% else %}text-bg-danger{% endif %}">{{ ticket.prioridad }}</span>
+    <div class="col border-end border-1 border-secondary-subtle p-3 d-grid position-relative" style="grid-template-rows: auto auto auto 1fr;">
+        <span class="position-absolute top-0 end-0 me-3 mt-2 text-muted">ID : {{ tickets.id }}</span>
+        <div class="mb-3">
+            <label for="cliente" class="form-label">Cliente solicitando:</label>
+            <input type="text" class="form-control" id="cliente" value="{{ tickets.cliente }}" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="tecnico" class="form-label">Tecnico asignado:</label>
+            <input type="text" class="form-control" id="tecnico" value="{% if tickets.tecnico == None %}Ningun Técnico aún.{% endif %}" readonly>
+        </div>
+        <div class="mb-3 row m-0 gap-2 text-center">
+            <div class="col p-0">
+                <label for="area" class="form-label">Area asignada:</label>
+                <input type="text" class="form-control" id="area" value="{{ tickets.area }}" readonly>
+            </div>
+            <div class="col p-0">
+                <label for="fecha_ini" class="form-label">Fecha de solicitud:</label>
+                <input type="datetime" class="form-control" id="fecha_ini" value="{{ tickets.fecha_ini }}" readonly>
+            </div>
+            <div class="col p-0{% if not tickets.fecha_fin %} d-flex flex-column{% endif %}">
+                <label for="fecha_fin" class="form-label">Fecha de terminada:</label>
+                {% if tickets.fecha_fin %}
+                <input type="text" class="form-control" id="fecha_fin" value="{{ tickets.fecha_fin }}" readonly>
+                {% else %}
+                <span class="badge rounded-pill text-bg-danger m-auto p-2 fs-6">No terminada aún.</span>
+                {% endif %}
+            </div>    
+        </div>
+        <div class="mb-3 h-auto pb-3 text-center">
+            <label for="situacion" class="form-label">Situacion a resolver:</label>
+            <textarea type="text" class="form-control h-100" id="situacion" readonly>{{ tickets.situacion }}</textarea>
+        </div>
+    </div>
+    <div class="col border-start border-1 border-secondary-subtle p-3 d-grid" style="grid-template-rows: 1fr auto;">
+        <div class="mb-3 text-center pb-4">
+            <label for="situacion" class="form-label">Descripcion:</label>
+            <textarea class="form-control resize-none h-100" name="descripcion" id="descripcion" readonly>{{ tickets.descripcion }}</textarea>
+        </div>
+        <div class="d-flex justify-content-around align-items-center">
+            <div class="d-flex flex-row gap-2 align-items-center">
+                <label class="">Estado de la Tarea:</label>
+                {% if tickets.realizada == True %}
+                <i class="bi bi-check-circle text-success fs-3"></i>
+                {% else %}
+                <i class="bi bi-x-circle text-danger fs-3"></i>
+                {% endif %}
+            </div>
+            {% if tickets.realizada == False %}
+            <div>
+                <button class="btn btn-outline-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteTicket"><i class="bi bi-trash-fill"></i> Cancelar</button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+{% if tickets.realizada == False %}
+<div class="modal fade" id="deleteTicket" data-bs-backdrop="static" tabindex="-1" aria-labelledby="deleteTicketLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content py-4 px-5 border border-2 rounded bg-body-tertiary form shadow">
+            <div class="container-fluid text-center position-relative border-bottom border-2 border-secondary-subtle">
+                <h2 class="fw-bold">Cancelar Ticket #{{ tickets.id }}</h2>
+            </div>
+            <div>
+                <h4 class="m-0 py-5 px-4 text-center">¿Esta seguro que desea cancelar el Ticket #{{ tickets.id }}?</h4>
+                <div class="d-flex border-top border-1 border-secondary-subtle pt-3">
+                    <a class="btn btn-success mx-auto" href="{% url 'delete_tickets' tickets.id %}" >Si</a>
+                    <button type="button" class="btn btn-danger mx-auto" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock base %}
+    

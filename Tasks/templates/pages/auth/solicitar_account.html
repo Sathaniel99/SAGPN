@@ -1,0 +1,60 @@
+{% extends 'base_template.html' %}
+{% load static %}
+{% block base_template %}
+<main>
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #062312;
+        }
+        .input-group-text{
+            width: 7rem;
+        }
+    </style>
+    <div class="p-4 border border-2 rounded bg-body-tertiary form shadow">
+        <a class="btn btn-outline-light position-absolute top-0 start-0 m-2" href="{{ last_url }}"><i class="bi bi-chevron-left me-1"></i>Atrás</a>
+        <h2 class="text-wrap text-center mb-4">Solicite una cuenta y espere a su aprobación</h2>
+        <form action="{% url 'solicitar_account' %}" method="post" class="d-flex flex-column">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col">
+                    <div class="my-2">
+                        <label for="{{ form.username.id_for_label }}" class="form-label">{{ form.username.label }}</label>
+                        {{ form.username }}
+                    </div>
+                    <div class="my-2">
+                        <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }}</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="my-2">
+                        <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label }}</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="my-2">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="my-2">
+                        <label for="{{ form.password1.id_for_label }}" class="form-label">Contraseña</label>
+                        {{ form.password1 }}
+                    </div>
+                    <div class="my-2">
+                        <label for="{{ form.password2.id_for_label }}" class="form-label">Confirmar contraseña</label>
+                        {{ form.password2 }}
+                    </div>
+                </div>
+                {{ form.rol }}
+            </div>
+            <button class="btn btn-outline-success mt-2 mb-2" type="submit" >
+                <i class="bi bi-plus-circle me-2"></i>Crear solicitud
+            </button>
+            <a class="mt-1 mx-auto" href="{% url 'login' %}">Autenticarse</a>
+        </form>
+    </div>
+</main>
+{% endblock base_template %}
+    

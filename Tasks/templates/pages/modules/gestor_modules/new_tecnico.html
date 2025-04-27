@@ -1,0 +1,46 @@
+{% extends 'pages/modules/gestor_modules/reportes.html' %}
+{% load static %}
+
+{% block reportes %}
+<label class="position-absolute top-0 end-0 me-3 mt-2 text-muted">{{ fecha }}</label>
+<div class="border-bottom border-secondary-subtle mb-3">
+    <h2>{{ title_page }}</h2>
+</div>
+<div class="d-flex justify-content-center">
+    <form method="POST" enctype="multipart/form-data" class="row g-3 col-sm-10 col-md-10 col-lg-10 col-xl-8 col-xxl-7">
+        {% csrf_token %}
+        <div class="col-md-6">
+            <label for="{{ form.username.id_for_label }}" class="form-label">{{ form.username.label }}</label>
+            {{ form.username }}
+        </div>
+        <div class="col-md-6">
+            <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+            {{ form.email }}
+        </div>
+        <div class="col-md-6">
+            <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }}</label>
+            {{ form.first_name }}
+        </div>
+        <div class="col-md-6">
+            <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label }}</label>
+            {{ form.last_name }}
+        </div>
+        <div class="col-md-6">
+            <label for="{{ form.rol.id_for_label }}" class="form-label">{{ form.rol.label }}</label>
+            <input type="text" class="form-control" value="Técnico" readonly>
+            <input type="hidden" name="rol" value="Técnico" id="id_rol">
+        </div>
+        <div class="col-md-6">
+            <label for="{{ form.password1.id_for_label }}" class="form-label">{{ form.password1.label }}</label>
+            {{ form.password1 }}
+        </div>
+        <div class="col-md-6">
+            <label for="{{ form.password2.id_for_label }}" class="form-label">{{ form.password2.label }}</label>
+            {{ form.password2 }}
+        </div>
+        <div class="col-md-6 d-flex">
+            <button type="submit" class="btn btn-success m-auto"><i class="bi bi-plus-circle me-2"></i>Guardar</button>
+        </div>
+    </form>
+</div>
+{% endblock reportes %}

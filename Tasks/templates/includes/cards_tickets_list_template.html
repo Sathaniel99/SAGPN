@@ -1,0 +1,41 @@
+{% if tickets %}
+{% for ax in tickets %}
+    <a class="card rounded border border-1 border-secondary-subtle p-3 position-relative text-decoration-none shadow transform-y-move transition-300" href="{% url 'view_tickets' ax.id %}">
+        <p class="position-absolute top-0 start-0 m-0 ms-2 mt-1 text-muted">{{ ax.id }}</p>
+        <span class="position-absolute top-0 end-0 m-0 me-2 mt-1 badge rounded-pill {% if ax.prioridad == 'Baja' %}text-bg-success{% elif ax.prioridad == 'Media' %}text-bg-warning{% else %}text-bg-danger{% endif %}">{{ ax.prioridad }}</span>
+        <h5 class="text-center text-nowrap border-bottom border-1 border-secondary-subtle m-0 p-2 pt-0">{{ ax.situacion }}</h5>
+        <div class="border-bottom border-2 border-secondary-subtle py-2">
+            <p class="m-0">Area: {{ ax.area }}</p>
+            <p class="m-0">Cliente: {{ ax.cliente }}</p>
+            <p class="m-0">Tecnico: 
+            {% if ax.tecnico %}
+            {{ ax.tecnico }}
+            {% else %}
+            <span class="badge rounded-pill text-bg-danger">Sin asignar</span>
+            {% endif %}
+                </p>
+        </div>
+        <div class="d-flex flex-row justify-content-between border-bottom border-2 border-secondary-subtle">
+            <div class="text-center">
+                <p class="m-0">Fecha creada</p>
+                <div>{{ ax.fecha_ini|date:"d/m/Y" }}</div>
+                <div>{{ ax.fecha_ini|date:"H:i:s" }}</div>
+            </div>
+            <hr class="border border-2 border-secondary h-100 m-0">
+            <div class="text-center">
+                <p class="m-0">Fecha terminada</p>
+                {% if ax.realizada %}
+                <div>
+                    <div class="badge rounded-pill text-bg-success">{{ ax.fecha_fin|date:"d/m/Y" }}</div>
+                    <div class="badge rounded-pill text-bg-success">{{ ax.fecha_fin|date:"H:i:s" }}</div>
+                </div>
+                {% else %}
+                <div class="badge rounded-pill text-bg-danger m-2">Sin completar.</div>
+                {% endif %}
+            </div>
+        </div>
+    </a>
+{% endfor %}
+{% else %}
+<div class="container rounded d-flex flex-column align-items-center justify-content-center fs-5 fw-bold bg-black bg-opacity-75 text-light text-center w-100" style="height: 15rem; border: .25rem dashed grey;">NO SE ENCUENTRAN TICKETS {% if request.path == '/list_my_tickets/' %}ASIGNADOS{% endif %}<i class="bi bi-ticket-perforated-fill display-1" style="transform: rotate(-30deg);"></i></div>
+{% endif %}

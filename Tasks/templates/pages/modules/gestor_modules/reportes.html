@@ -1,0 +1,48 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block base %}
+<style>
+    #section-base{
+        --bs-gutter-x: 1.5rem;
+        --bs-gutter-y: 0;
+        display: flex;
+        margin-top: calc(-1 * var(--bs-gutter-y));
+    }
+    main{
+        background: linear-gradient(rgb(0 0 0 / 79%), rgba(0, 0, 0, 0.5)), url("{% static 'img/home-wallpaper.jpg' %}") no-repeat center;
+        background-size: cover;
+    }
+</style>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<aside class="col-4 col-sm-4 col-md-3 col-lg-4 col-xl-3 col-xxl-2 border-end border-2 d-flex flex-column align-items-start shadow bg-black bg-opacity-50 px-2 py-4" >
+    <h4 class="text-center w-100 text-light">Páginas</h4>
+    <a class="btn btn-outline-{% if 'reporte_general' in request.path %}light active {% else %}secondary{% endif %} rounded-0 mt-2 " href="{% url 'reporte_general' %}"><i class="bi bi-bar-chart me-2"></i>Resumen General</a>
+    <a class="btn btn-outline-{% if 'new_ticket' in request.path or 'list_complete_tickets' in request.path or 'list_all_tickets' in request.path or 'asignar_tickets' in request.path %}light active{% else %}secondary{% endif %} rounded-0 mt-2" data-bs-toggle="collapse" data-bs-target="#tickets_collapse" aria-expanded="false" aria-controls="tickets_collapse"><i class="bi bi-ticket-perforated me-2"></i>Tickets</a>
+    <div class="w-100 border border-2 border-secondary rounded p-2 bg-black bg-opacity-25 collapse rounded-top-0 rounded-end{% if 'new_ticket' in request.path or 'list_complete_tickets' in request.path or 'list_all_tickets' in request.path or 'asignar_tickets' in request.path %} show{% endif %}" id="tickets_collapse">
+        <div class="d-flex flex-column align-items-start gap-1 ps-1">
+            <a class="btn btn-outline-{% if 'new_ticket' in request.path %}light active {% else %}secondary{% endif %}" style="width: 13rem;" href="{% url 'new_ticket' %}"><i class="bi bi-plus-circle me-2"></i>Crear</a>
+            <a class="btn btn-outline-{% if 'asignar_tickets' in request.path %}light active {% else %}secondary{% endif %}" style="width: 13rem;" href="{% url 'asignar_tickets' %}"><i class="bi bi-ticket-perforated-fill me-2"></i>Asignar Tickets</a>
+            <a class="btn btn-outline-{% if 'list_all_tickets' in request.path %}light active {% else %}secondary{% endif %}" style="width: 13rem;" href="{% url 'list_all_tickets' %}"><i class="bi bi-database-fill me-2"></i>Total de Tickets</a>
+            <a class="btn btn-outline-{% if 'list_complete_tickets' in request.path %}light active {% else %}secondary{% endif %}" style="width: 13rem;" href="{% url 'list_complete_tickets' %}"><i class="bi bi-database-fill me-2"></i>Tickets Completados</a>
+        </div>
+    </div>
+    <a class="btn btn-outline-{% if 'new_tecnico' in request.path or 'solicitudes_accounts' in request.path or 'list_accounts' in request.path or 'list_tecnicos' in request.path or 'list_clientes' in request.path %}light show {% else %}secondary{% endif %} rounded-0 mt-2" data-bs-toggle="collapse" data-bs-target="#users_collapse" aria-expanded="false" aria-controls="users_collapse"><i class="bi bi-people-fill me-2"></i>Usuarios</a>
+    <div class="w-100 border border-2 border-secondary rounded p-2 bg-black bg-opacity-25 collapse rounded-top-0 rounded-end {% if 'new_tecnico' in request.path or 'solicitudes_accounts' in request.path or 'list_accounts' in request.path or 'list_tecnicos' in request.path or 'list_clientes' in request.path %} show{% endif %}" id="users_collapse">
+        <div class="d-flex flex-column align-items-start gap-1 ps-1">
+            <a class="btn btn-outline-{% if 'new_tecnico' in request.path %}light active {% else %}secondary {% endif %}" style="width: 13rem;" href="{% url 'new_tecnico' %}"><i class="bi bi-person me-2"></i>Crear Técnico</a>
+            <a class="btn btn-outline-{% if 'solicitudes_accounts' in request.path %}light active {% else %}secondary {% endif %}" style="width: 13rem;" href="{% url 'solicitudes_accounts' %}"><i class="bi bi-person-square me-2"></i>Solicitudes de Cuenta</a>
+            <a class="btn btn-outline-{% if 'list_accounts' in request.path %}light active {% else %}secondary{% endif %}" style="width: 13rem;" href="{% url 'list_accounts' %}"><i class="bi bi-person-vcard me-2"></i>Cuentas</a>
+            <a class="btn btn-outline-{% if 'list_tecnicos' in request.path %}light active {% else %}secondary{% endif %}" style="width: 13rem;" href="{% url 'list_tecnicos' %}"><i class="bi bi-person-fill-gear me-2"></i>Técnicos</a>
+            <a class="btn btn-outline-{% if 'list_clientes' in request.path %}light active {% else %}secondary{% endif %}" style="width: 13rem;" href="{% url 'list_clientes' %}"><i class="bi bi-people-fill me-2"></i>Clientes</a>
+        </div>
+    </div>
+      
+</aside>
+<section class="col bg-body p-4 position-relative">
+{% block reportes %}
+{% endblock reportes %}
+</section>
+
+
+{% endblock base %}

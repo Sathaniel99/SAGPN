@@ -1,0 +1,59 @@
+body{
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+html[data-bs-theme="dark"] .shadow{
+    box-shadow: 1px 1px 12px #ffffff4a !important
+}
+html[data-bs-theme="light"] .btn-outline-light{
+    border: 1px solid #6c757d !important;
+    color: #6c757d;
+}
+.highcharts-credits{
+    display: none;
+}
+#btn-theme{
+    width: 2.5rem;
+    height: 2.5rem;
+}
+.pointer-events-none{
+    pointer-events: none;
+}
+.z-index-overall{
+    z-index: 1055;
+}
+ul.dropdown-menu.show{
+    display: flex;
+    flex-direction: row;
+}
+
+.transform-y-move:hover{
+    transform: translateY(-5px);
+}
+
+.transition-300{
+    transition: all 300ms ease-in-out;
+}
+.resize-none{
+    resize: none;
+}
+
+select{
+    cursor: pointer;
+}
+select:hover{
+    box-shadow: 0 0 5px #0d6efd;
+}
+
+input[role="switch"], input[role="switch"] + label{
+    cursor: pointer;
+}
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+.form-check-input:not(:checked) {
+    background-color: #ff2121ef;
+    border-color: #ff2121ef;
+}

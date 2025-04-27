@@ -1,0 +1,57 @@
+{% extends 'base_template.html' %}
+{% load static %}
+{% block base_template %}
+<main>
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #062312;
+        }
+        .form{
+            width: 30rem;
+            height: 30rem;
+        }
+        .input-group-text{
+            width: 7rem;
+        }
+    </style>
+    <div class="p-4 border border-2 rounded bg-body-tertiary form shadow d-flex flex-column">
+        <a class="btn btn-outline-light position-absolute top-0 start-0 m-2" href="{% url 'home' %}"><i class="bi bi-chevron-left me-1"></i>Atrás</a>
+        <h2 class="text-wrap text-center mb-4">Bienvenido al Sistema Automatizado de Gestion de Problemas y Necesidades</h2>
+        <form action="{% url 'login' %}" method="post" class="d-flex flex-column">
+            {% csrf_token %}
+            <div class="mb-1 input-group">
+                <span class="input-group-text" for="username">Usuario</span>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de usuario">
+            </div>
+            <div class="mb-1 input-group d-flex flex-row">
+                <span class="input-group-text" for="password">Contraseña</span>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña">
+                <button class="btn btn-outline-secondary" type="button" id="toggleViewPass"><i class="bi bi-eye-fill"></i></button>
+            </div>
+            <button class="btn btn-outline-success mt-1 mb-2" type="submit" >
+                <i class="bi bi-person"></i> Iniciar Sesion
+            </button>
+        </form>
+        <a class="mt-1 mx-auto" href="{% url 'solicitar_account' %}">¿No tienes cuenta? Solicita un registro y obten una.</a>
+        <div class="w-100 d-flex justify-content-center align-items-center my-2" style="height: 8rem;">
+            <img class="object-fit-contain h-100 pointer-events-none" src="{% static 'img/SAGPN.png' %}" alt="Logo SAGPN">
+        </div>
+    </div>
+    <script>
+        const inputPass = document.getElementById("password");
+        const toggleViewPass = document.getElementById("toggleViewPass");
+
+        toggleViewPass.addEventListener("click", () => {
+          inputPass.type == "text"
+            ? (inputPass.type = "password")
+            : (inputPass.type = "text");
+          toggleViewPass.children[0].classList.toggle("bi-eye-fill");
+          toggleViewPass.children[0].classList.toggle("bi-eye-slash-fill");
+        });
+    </script>
+</main>
+{% endblock base_template %}
+    

@@ -1,0 +1,28 @@
+{% extends 'base_template.html' %}
+{% load static %}
+
+
+{% block base_template %}
+    <style>
+        body{% if not request.path == '/' %}, #section-base{% endif %}{
+            display: grid;
+            grid-template-rows: auto 1fr;
+        }
+        body{
+            min-height: 100vh;
+        }
+        main{
+            background: linear-gradient(rgb(0 0 0 / 79%), rgba(0, 0, 0, 0.5)), url('{% static 'img/builds.jpg' %}') no-repeat center;
+            background-size: cover;
+        }
+    </style>
+    <main id="section-base">
+        {% if not request.path == '/' and not '/access_denied' %}
+            {% include 'includes/mini-navbar.html' %}
+        {% endif %}
+        {% block base %}
+                
+        {% endblock base %}
+    </main>
+{% endblock base_template %}
+    

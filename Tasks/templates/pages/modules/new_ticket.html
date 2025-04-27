@@ -1,0 +1,83 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block base %}
+<style>
+    #section-base{
+        display: flex;
+    }
+</style>
+<form class="m-auto bg-body-secondary p-5 rounded shadow" method="post" style="width: 30rem; height: auto;">
+    {% csrf_token %}
+    
+    <!-- Cliente -->
+    <div>
+        <label class="text-center w-100" for="{{ form.cliente.id_for_label }}">Cliente:</label>
+        <select class="form-select {% if user.rol == 'Cliente' %}pointer-events-none{% endif %}" name="{{ form.cliente.name }}" {% if user.rol == 'Cliente' %}required{% endif %} id="{{ form.cliente.id_for_label }}">
+            {% if user.rol == "Cliente" %}
+                <option value="{{ user.id }}" selected>{{ user.first_name }} {{ user.last_name }}</option>
+            {% else %}
+                <option value="" selected hidden>---------</option>
+                {% for ax in form.cliente.field.queryset %}
+                    <option value="{{ ax.id }}">{{ ax.first_name }} {{ ax.last_name }}</option>
+                {% endfor %}
+            {% endif %}
+        </select>
+    </div>
+
+    <!-- Técnico -->
+    {% if user.rol == "Técnico" or user.rol == "Gestor de Tareas" %}
+    <div>
+        <label class="text-center w-100" for="{{ form.tecnico.id_for_label }}">Técnico Asignado (opcional):</label>
+        <select class="form-select{% if user.rol == 'Técnico' %} pointer-events-none{% endif %}" name="{{ form.tecnico.name }}" id="{{ form.tecnico.id_for_label }}">
+            {% if user.rol == "Técnico" %}
+            <option value="{{ user.id }}" selected>{{ user.first_name }} {{ user.last_name }}</option>
+            {% else %}
+            <option value="" selected hidden>---------</option>
+            {% for ax in form.tecnico.field.queryset %}
+            <option value="{{ ax.id }}">{{ ax.first_name }} {{ ax.last_name }}</option>
+            {% endfor %}
+            {% endif %}
+        </select>
+    </div>
+    {% endif %}
+
+    <!-- Situación -->
+    <div>
+        <label class="text-center w-100" for="{{ form.situacion.id_for_label }}">Situación:</label>
+        <input class="form-control" type="text" name="{{ form.situacion.name }}" maxlength="20" required id="{{ form.situacion.id_for_label }}" />
+    </div>
+
+    <!-- Área de la Empresa -->
+    <div>
+        <label class="text-center w-100" for="{{ form.area.id_for_label }}">Área de la Empresa:</label>
+        <select class="form-select" name="{{ form.area.name }}" required id="{{ form.area.id_for_label }}">
+            {% for value, label in form.area.field.choices %}
+                <option value="{{ value }}" {% if label == "---------" %} hidden selected {% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Descripción -->
+    <div>
+        <label class="text-center w-100" for="{{ form.descripcion.id_for_label }}">Descripción:</label>
+        <textarea class="w-100 form-control" name="{{ form.descripcion.name }}" required id="{{ form.descripcion.id_for_label }}" style="height: 15rem;" value="{{ form.descripcion.value }}"></textarea>
+    </div>
+
+    <!-- Prioridad -->
+    <div>
+        <label class="text-center w-100" for="{{ form.prioridad.id_for_label }}">Prioridad:</label>
+        <select class="form-select" name="{{ form.prioridad.name }}" id="{{ form.prioridad.id_for_label }}">
+            <option value="" selected hidden>- Seleccione Prioridad -</option>
+            {% for value, label in form.prioridad.field.choices %}
+                <option value="{{ value }}" class="{% cycle 'bg-success' 'bg-warning' 'bg-danger' %}">{{ label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+        
+    <div class="d-flex">
+        <button type="submit" class="m-auto btn btn-success mt-3">Guardar</button>
+    </div>
+    
+</form>
+{% endblock base %}

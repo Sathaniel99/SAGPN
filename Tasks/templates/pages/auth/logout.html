@@ -1,0 +1,9 @@
+{% extends 'base_template.html' %}
+{% load static %}
+
+
+{% block base_template %}    
+<h2>¡Sesión cerrada con éxito!</h2>
+<a href="{% url 'login' %}">Volver a iniciar sesión</a>
+{% endblock base_template %}
+    

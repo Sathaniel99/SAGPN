@@ -1,0 +1,69 @@
+{% for ticket in tickets %}
+<h4 class="modal-title text-center">Ticket #{{ticket.id}}</h5>
+<hr>
+<div class="modal-body">
+    <!-- Cliente -->
+    <div class="mb-3">
+        <label for="cliente" class="form-label fw-bold">Cliente:</label>
+        <p id="cliente" class="form-control-plaintext">{{ ticket.cliente.first_name }} {{ ticket.cliente.last_name }} </p>
+    </div>
+    <hr>
+    <!-- Situación y Área -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="situacion" class="form-label fw-bold">Situación:</label>
+            <p id="situacion" class="form-control-plaintext">{{ ticket.situacion }}</p>
+        </div>
+        <div class="col-md-6">
+            <label for="area" class="form-label fw-bold">Área:</label>
+            <p id="area" class="form-control-plaintext">{{ ticket.area }}</p>
+        </div>
+    </div>
+    <hr>
+    <!-- Descripción -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <label for="descripcion" class="form-label fw-bold">Descripción:</label>
+            <div id="descripcion" class="form-control-plaintext border rounded p-2">
+                {{ ticket.descripcion }}
+            </div>
+        </div>
+    </div>
+    <hr>
+    <!-- Fechas -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="fecha_ini" class="form-label fw-bold">Fecha de Inicio:</label>
+            <p id="fecha_ini" class="form-control-plaintext">{{ ticket.fecha_ini }}</p>
+        </div>
+        <div class="col-md-6">
+            <label for="fecha_fin" class="form-label fw-bold">Fecha de Finalización:</label>
+            {% if ticket.fecha_fin %}
+            <p id="fecha_fin" class="form-control-plaintext">{{ ticket.fecha_fin}}</p>
+            {% else %}
+            <span id="fecha_fin" class="badge bg-danger">No Finalizado</span>
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    <!-- Prioridad y Estado -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="prioridad" class="form-label fw-bold">Prioridad:</label>
+            <span id="prioridad" class="badge {% if ticket.prioridad == 'Alta' %}bg-danger{% elif ticket.prioridad == 'Media' %}bg-warning text-dark{% else %}bg-success{% endif %}">
+                {{ ticket.prioridad }}
+            </span>
+        </div>
+        <div class="col-md-6">
+            <label for="realizada" class="form-label fw-bold">Estado:</label>
+            <span id="realizada" class="badge {% if ticket.realizada %}bg-success{% else %}bg-secondary{% endif %}">
+                {% if ticket.realizada %}Completado{% else %}Pendiente{% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="d-flex justify-content-center">
+    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Entendido</button>
+</div>
+{% endfor %}

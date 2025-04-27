@@ -1,0 +1,74 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+{% block base %}
+<style>
+    #section-base{
+        display: flex;
+    }
+</style>
+
+<div class="row m-auto">
+    <!--  CREAR TICKET ( CLIENTE TECNICO )  -->
+    <div class="col">
+        <a class="btn btn-success m-auto transform-y-move transition-300 card h-100 p-3 shadow" href="{% url 'new_ticket' %}">
+            <div>
+                <i class="bi bi-plus-circle display-5"></i>
+            </div>
+            <div>
+                Crear Nuevo Ticket
+            </div>
+        </a>
+    </div>
+
+    
+    {% if user.rol == 'Cliente' or user.rol == 'Técnico' %}
+    <!--  LISTAR TICKET ASIGNADOS AL TECNICO O PROPIOS DEL CLIENTE (CLIENTE TECNICO) -->
+    <div class="col">
+        <a class="btn btn-secondary m-auto transform-y-move transition-300 card h-100 p-3 shadow position-relative" href="{% url 'list_my_tickets' %}">
+            {% if not tickets_asignados == 0 %}
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger d-flex justify-content-center align-items-center shadow" style="width: 2.3rem; height: 2.2rem;">
+                <p class="m-0">{{ tickets_asignados }}</p>
+            </span>
+            {% endif %}
+            <div>
+                <i class="bi bi-list-check display-5"></i>
+            </div>
+            <div>
+                Listar {% if user.rol == 'Técnico' %}Tickets Asignados{% else %}mis Tickets{% endif %}
+                    
+            </div>
+        </a>
+    </div>
+    {% endif %}
+        
+    
+    {% if not user.rol == 'Cliente'%}    
+    <!--  LISTAR TICKET  ( TECNICO ) -->
+    <div class="col">
+        <a class="btn btn-secondary m-auto transform-y-move transition-300 card h-100 p-3 shadow" href="{% url 'list_all_tickets' %}">
+            <div class="position-relative">
+                <i class="bi bi-list-ul display-5"></i>
+            </div>
+            <div>
+                Listar total Tickets
+            </div>
+        </a>
+    </div>
+
+    <!--  LISTAR TICKET COMPLETADOS ( TECNICOS ) -->
+    <div class="col">
+        <a class="btn btn-secondary m-auto transform-y-move transition-300 card h-100 p-3 shadow" href="{% url 'list_complete_tickets' %}">
+            <div class="position-relative">
+                <i class="bi bi-list-ul display-5"></i>
+                <i class="bi bi-check-circle-fill position-absolute bottom-0 fs-3 me-2"></i>
+            </div>
+            <div>
+                Listar Tickets Completados
+            </div>
+        </a>
+    </div>
+    {% endif %}
+        
+</div>
+{% endblock base %}
+    

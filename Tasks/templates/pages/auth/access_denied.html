@@ -1,0 +1,19 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+{% block base %}
+<style>
+    #section-base{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="shadow rounded border border-2 border-secondary-subtle px-4 py-5 my-1 bg-body bg-opacity-50 d-flex flex-column align-items-center text-center">
+    <i class="bi bi-exclamation-octagon-fill display-1 text-danger text-shadow" style="text-shadow: 3px 1px 35px black;"></i>
+    <h1>ACCESO DENEGADO</h1>
+    <h5>Su solicitud de esta página ha sido rechazada, no tiene el rol de usuario correspondiente.</h5>
+    <h5 class="mb-4">Por favor, vuelva a intentar otra opción.</h5>
+    <a class="btn btn-light shadow" href="{% url 'home' %}"><i class="bi bi-house-door-fill me-2"></i>Página principal</a>
+</div>
+{% endblock base %}
+    

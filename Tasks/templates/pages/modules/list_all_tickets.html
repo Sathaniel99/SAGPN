@@ -1,0 +1,85 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block base %}
+<style>
+    .grid-autofit-min-248{
+        grid-template-columns: repeat(auto-fit, min(248px));
+    }   
+    .htmx-indicator {
+        transition: opacity 200ms ease-in;
+    }
+    .htmx-request .htmx-indicator {
+        opacity: 1;
+    }
+</style>
+<div>
+    <div class="input-group container-fluid my-5" style="max-width: 40rem;">
+        <input type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar..." aria-describedby="search-input" name="search-input" id="search-input" hx-get="{% if request.path == '/list_all_tickets/' %}{% url 'search_ticket' %}{% else %}{% url 'search_ticket_own' %}{% endif %}" hx-target="#container-card" hx-trigger="keyup delay:500ms changed, search from:find input" hx-indicator=".search-indicator">
+        <button class="btn btn-secondary" type="button" id="search-button">
+            <i class="bi bi-search"></i>
+            <span class="search-indicator htmx-indicator ms-2 spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="loading"></span>
+        </button>
+    </div>
+    <div class="container-fluid d-grid grid-autofit-min-248 gap-3 justify-content-center" id="container-card">
+        
+        {% if tickets %}
+        {% for ax in tickets %}
+            <a class="card rounded border border-1 border-secondary-subtle p-3 position-relative text-decoration-none shadow transform-y-move transition-300 justify-content-between{% if ax.realizada %} bg-success-subtle{% else %} bg-danger-subtle{% endif %}" href="{% url 'update_tickets' ax.id %}">
+                <p class="position-absolute top-0 start-0 m-0 ms-2 mt-1 text-muted">{{ ax.id }}</p>
+                <span class="position-absolute top-0 end-0 m-0 me-2 mt-1 badge rounded-pill {% if ax.prioridad == 'Baja' %}text-bg-success{% elif ax.prioridad == 'Media' %}text-bg-warning{% else %}text-bg-danger{% endif %}">{{ ax.prioridad }}</span>
+                <h5 class="text-center text-nowrap border-bottom border-1 border-secondary-subtle m-0 p-2 pt-0">{{ ax.situacion }}</h5>
+                <div class="py-2">
+                    <p class="m-0">Area: {{ ax.area }}</p>
+                    <p class="m-0">Cliente: {{ ax.cliente.first_name }}</p>
+                    <p class="m-0">Tecnico: 
+                    {% if ax.tecnico %}
+                    {{ ax.tecnico.first_name }}
+                    {% else %}
+                    <span class="badge rounded-pill text-bg-danger">Sin asignar</span>
+                    {% endif %}
+                        </p>
+                </div>
+                <div class="d-flex flex-row justify-content-around border-top border-2 border-secondary-subtle">
+                    <div class="text-center">
+                        <p class="m-0">Creada</p>
+                        <div class="badge rounded-pill text-bg-success">{{ ax.fecha_ini|date:"d/m/Y" }}</div>
+                    </div>
+                    <hr class="border border-2 border-secondary h-100 m-0">
+                    <div class="text-center d-flex flex-column align-items-center">
+                        {% if ax.realizada %}
+                        <p class="m-0">Terminada</p>
+                        <div>
+                            <div class="badge rounded-pill text-bg-success">{{ ax.fecha_fin|date:"d/m/Y" }}</div>
+                        </div>
+                        {% else %}
+                        <div class="badge rounded-pill text-bg-danger m-auto">Sin completar.</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+        {% else %}
+        <div class="container rounded d-flex flex-column align-items-center justify-content-center fs-5 fw-bold bg-black bg-opacity-75 text-light text-center w-100" style="height: 15rem; border: .25rem dashed grey;">NO SE ENCUENTRAN TICKETS {% if request.path == '/list_my_tickets/' %}ASIGNADOS{% endif %}<i class="bi bi-ticket-perforated-fill display-1" style="transform: rotate(-30deg);"></i></div>
+        {% endif %}
+            
+        
+    </div>
+</div>
+<script>
+    document.getElementById("search-button").addEventListener('click', function () {
+        const event = new Event('search', { bubbles: true });
+        document.getElementById('search-input').dispatchEvent(event);
+    });
+    document.body.addEventListener('htmx:beforeRequest', function() {
+        document.getElementsByClassName("bi bi-search")[0].classList.add('d-none');
+        document.getElementById('loading').classList.add('d-block');
+    });
+
+    document.body.addEventListener('htmx:afterRequest', function() {
+        document.getElementsByClassName("bi bi-search")[0].classList.remove('d-none');
+        document.getElementById('loading').classList.remove('d-block');
+    });
+</script>
+{% endblock base %}
+    

@@ -1,0 +1,143 @@
+{% extends 'base_template.html' %}
+{% load static %}
+{% block base_template %}
+<main>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{% static "img/home-wallpaper.jpg" %}') no-repeat center center;
+            background-size: cover;
+            color: white;
+            height: 100vh;
+        }
+    </style>
+    <!-- Hero Section -->
+    <section class="hero-section d-flex justify-content-center align-items-center text-center" style="box-shadow: 0 3rem 6rem black inset;">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Optimiza la Gestión de Problemas y Necesidades en tu Empresa</h1>
+            <p class="lead">Un sistema automatizado para resolver problemas de manera eficiente.</p>
+            <div class="mt-4">
+                <a href="#" class="btn btn-dark-orange btn-lg me-2">Prueba Gratuita</a>
+                <a href="#" class="btn btn-light btn-lg">Más Información</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Características -->
+    <section id="caracteristicas" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">¿Por qué elegir SAGPN?</h2>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-ticket-perforated-fill display-3 text-dark-orange"></i>
+                    <h4>Gestión de Tickets en Tiempo Real</h4>
+                    <p>Los clientes pueden crear tickets y recibir respuestas rápidas.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-bell-fill display-3 text-dark-orange"></i>
+                    <h4>Notificaciones Instantáneas</h4>
+                    <p>Recibe alertas en tiempo real cuando se completen tareas.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-bar-chart-fill display-3 text-dark-orange"></i>
+                    <h4>Reportes Gráficos</h4>
+                    <p>Visualiza el rendimiento de los técnicos y obtén información de su desempeño.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ¿Cómo Funciona? -->
+    <section id="como-funciona" class="py-5 bg-info-subtle">
+        <div class="container">
+            <h2 class="text-center mb-5 text-muted">Simplifica la Gestión de Problemas y Necesidades</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card text-center p-4 h-100 shadow">
+                        <i class="bi bi-file-earmark-text mb-3 display-3 text-info"></i>
+                        <h5>Creación de Tickets</h5>
+                        <p>Un cliente crea un ticket describiendo el problema.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center p-4 h-100 shadow">
+                        <i class="bi bi-bell mb-3 display-3 text-info"></i>
+                        <h5>Notificación Automática</h5>
+                        <p>El sistema notifica al gestor de tareas o directamente a los técnicos disponibles.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center p-4 h-100 shadow">
+                        <i class="bi bi-check-circle mb-3 display-3 text-info"></i>
+                        <h5>Seguimiento y Resolución</h5>
+                        <p>El técnico resuelve el problema y marca el ticket como completado.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roles de Usuario -->
+    <section id="roles" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Diseñado para Cada Rol en tu Empresa</h2>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-person display-3 text-dark-orange"></i>
+                    <h4>Cliente</h4>
+                    <p>Crea tickets y recibe actualizaciones en tiempo real sobre el estado de su solicitud.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-tools display-3 text-dark-orange"></i>
+                    <h4>Técnico</h4>
+                    <p>Recibe asignaciones de tareas y resuelve problemas de manera eficiente.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-list-task display-3 text-dark-orange"></i>
+                    <h4>Gestor de Tareas</h4>
+                    <p>Administra tickets, asigna tareas y genera reportes para optimizar el trabajo del equipo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section id="testimonios" class="py-5 bg-info-subtle">
+        <div class="container">
+            <h2 class="text-center mb-5">Lo que dicen nuestros usuarios</h2>
+            <div class="row">
+                <div class="col-md-4 h-auto">
+                    <div class="shadow border border-1 border-light rounded p-4 m-1 h-100">
+                        <p>"Gracias a SAGPN, hemos reducido el tiempo de respuesta a problemas en un 40%."</p>
+                        <p><strong>- Cliente Satisfecho</strong></p>
+                    </div>
+                </div>
+                <div class="col-md-4 h-auto">
+                    <div class="shadow border border-1 border-light rounded p-4 m-1 h-100">
+                        <p>"La interfaz es intuitiva y los reportes gráficos me ayudan a tomar mejores decisiones."</p>
+                        <p><strong>- Gestor de Tareas</strong></p>
+                    </div>
+                </div>
+                <div class="col-md-4 h-auto">
+                    <div class="shadow border border-1 border-light rounded p-4 m-1 h-100">
+                        <p>"El sistema me permite enfocarme en resolver problemas sin distracciones."</p>
+                        <p><strong>- Técnico</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Llamado a la Acción -->
+    <section id="cta" class="py-5 text-center">
+        <div class="container">
+            <h2 class="mb-4">Transforma la Gestión de Problemas en tu Empresa Hoy Mismo</h2>
+            <p class="lead">Regístrate ahora y obtén acceso gratuito durante 14 días.</p>
+            <a href="#" class="btn btn-dark-orange btn-lg me-2">Prueba Gratuita</a>
+            <a href="#" class="btn btn-outline-dark-orange btn-lg">Contactar al Equipo</a>
+        </div>
+    </section>
+</main>
+{% endblock base_template %}

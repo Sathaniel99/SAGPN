@@ -1,0 +1,28 @@
+{% load static %}
+<section class="border border-1 border-secondary-subtle bg-body-tertiary p-2 gap-2 d-flex w-100">
+    <div class="dropdown">
+        <a class="btn btn-outline-light btn-sm dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-ticket-perforated-fill me-1"></i>Tickets
+        </a>
+        <ul class="dropdown-menu p-4 gap-3">
+            <a class="btn btn-outline-success m-2 text-nowrap shadow"><i class="bi bi-plus-circle me-2"></i>Crear</a>
+            <a class="btn btn-outline-info m-2 text-nowrap shadow"><i class="bi bi-list-ul me-2"></i>Listar</a>
+            {% if user.rol == "Gestor" %}
+            <a class="btn btn-outline-secondary m-2 text-nowrap shadow"><i class="bi bi-view-list me-2"></i>Sin asignar</a>
+            {% endif %}
+                
+        </ul>
+    </div>
+    {% if user.rol == "Gestor" %}
+    <div class="dropdown">
+        <a class="btn btn-outline-light btn-sm dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-fill-gear me-1"></i>Gestionar Tecnicos
+        </a>
+        <ul class="dropdown-menu p-4 gap-3">
+            <a class="btn btn-outline-success m-2 text-nowrap shadow"><i class="bi bi-plus-circle me-2"></i>Crear</a>
+            <a class="btn btn-outline-info m-2 text-nowrap shadow"><i class="bi bi-list-ul me-2"></i>Listar</a>
+            <a class="btn btn-outline-secondary m-2 text-nowrap shadow"><i class="bi bi-bar-chart-fill me-2"></i>Reportes</a>
+        </ul>
+    </div>
+    {% endif %}
+</section>
