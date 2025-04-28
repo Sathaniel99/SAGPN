@@ -2,9 +2,13 @@
 
 ## Tabla de Contenido
 - [Introducción](#introducción)
+- [Problemática](#problemática)
 - [Características](#características)
+- [Tipos de Usuarios](#tipos-de-usuarios)
 - [Modelos del Sistema](#modelos-sistema)
 - [Estructura del Proyecto](#estructura)
+
+---
 
 # 🚀 **SAGPN (Sistema Automatizado de Gestión de Problemas y Necesidades)** {#introducción}
 
@@ -14,7 +18,7 @@
 
 ---
 
-## 📋 **Problemática**
+## 📋 **Problemática** {#problemática}
 
 En muchas empresas, la gestión manual de problemas y necesidades puede resultar ineficiente, propensa a errores y lenta. **SAGPN** resuelve esta problemática al automatizar el proceso de creación, asignación y seguimiento de tickets, optimizando así la comunicación entre clientes, técnicos y gestores de tareas.
 
@@ -30,7 +34,7 @@ En muchas empresas, la gestión manual de problemas y necesidades puede resultar
 
 ---
 
-## 🧑‍💻 **Tipos de Usuarios**
+## 🧑‍💻 **Tipos de Usuarios** {#tipos-de-usuarios}
 
 El sistema cuenta con tres tipos de usuarios principales:
 
@@ -76,6 +80,7 @@ El sistema cuenta con tres tipos de usuarios principales:
 ---
 
 ## 🏗️ **Estructura del Proyecto** {#estructura}
+
 - **Framework**: Django
 - **Interfaz de Usuario**: Django templates, Bootstrap
 - **Base de Datos**: SQLite
