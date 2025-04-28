@@ -5,7 +5,6 @@
 - [Características](#características)
 - [Modelos del Sistema](#modelos-sistema)
 - [Estructura del Proyecto](#estructura)
-- [Licencia](#licencia)
 
 # 🚀 **SAGPN (Sistema Automatizado de Gestión de Problemas y Necesidades)** {#introducción}
 
